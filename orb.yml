@@ -1,0 +1,29 @@
+version: 2.1
+description: "Sonatype Nexus Platform Integration"
+
+executors:
+  default:
+    description: "CircleCI image for OpenJDK"
+    docker:
+    - image: circleci/openjdk
+
+commands:
+  install:
+    description: "Installs the nexus-platform-api and CLI script"
+    parameters:
+      nexus-platform-api-version:
+        type: string
+        default: "3.3.20181025-095610.1ce86ad"
+    steps:
+    - run: |
+        curl http://central.maven.org/maven2/com/sonatype/nexus/nexus-platform-api/<< parameters.nexus-platform-api-version >>/nexus-platform-api-<< parameters.nexus-platform-api-version >>.jar -o nexus-platform-api.jar
+
+  archive:
+    steps:
+    - run: echo "Archive command will start here"
+
+jobs:
+  nexus-platform:
+    executor: default
+    steps:
+    - install
