@@ -24,16 +24,52 @@ commands:
   archive:
     description: "Archives artifacts to Nexus Repository Manager"
     parameters:
-      publisher-parameters:
+      username:
         type: string
-        # TODO this will be parametrized - a WIP shortcut
-        default: "--username admin --password admin123 --serverurl http://localhost:8081/ --filename /tmp/workspace/test1-1.0-SNAPSHOT.jar --format maven2 -CgroupId=com.example -CartifactId=myapp -Cversion=1.0 -Aextension=jar --repository maven-releases"
+        default: "admin"
+      password:
+        type: string
+        default: "admin123"
+      serverurl:
+        type: string
+        default: "http://localhost:8081/"
+      filename:
+        type: string
+        default: "/tmp/workspace/test1-1.0-SNAPSHOT.jar"
+      format:
+        type: string
+        default: "maven2"
+      groupId:
+        type: string
+        default: "com.example"
+      artifactId:
+        type: string
+        default: "myapp"
+      version:
+        type: string
+        default: "1.0"
+      extension:
+        type: string
+        default: "jar"
+      repository:
+        type: string
+        default: "maven-releases"
 
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    - run: |
-        groovy/bin/groovy NexusPublisher.groovy << parameters.publisher-parameters >>
+    - run: >
+        groovy/bin/groovy NexusPublisher.groovy
+        --username <<parameters.username>>
+        --password <<parameters.password>>
+        --serverurl <<parameters.serverurl>>
+        --filename <<parameters.filename>>
+        --format <<parameters.format>>
+        -CgroupId=<<parameters.groupId>>
+        -CartifactId=<<parameters.artifactId>>
+        -Cversion=<<parameters.version>>
+        -Aextension=<<parameters.extension>>
+        --repository <<parameters.repository>>
 
 jobs:
   nexusjob:
