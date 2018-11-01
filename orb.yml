@@ -11,19 +11,33 @@ commands:
   install:
     description: "Installs the nexus-platform-api and CLI script"
     parameters:
-      nexus-platform-api-version:
+      groovy-version:
         type: string
-        default: "3.3.20181025-095610.1ce86ad"
+        default: "2.5.3"
     steps:
     - run: |
-        curl http://central.maven.org/maven2/com/sonatype/nexus/nexus-platform-api/<< parameters.nexus-platform-api-version >>/nexus-platform-api-<< parameters.nexus-platform-api-version >>.jar -o nexus-platform-api.jar
+        curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<<parameters.groovy-version>>.zip -o apache-groovy-binary.zip
+        curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/INT-1109_repository_groovy_wrapper/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
+        unzip apache-groovy-binary.zip
+        mv groovy-<< parameters.groovy-version>> groovy
 
   archive:
+    description: "Archives artifacts to Nexus Repository Manager"
+    parameters:
+      publisher-parameters:
+        type: string
+        # TODO this will be parametrized - a WIP shortcut
+        default: "--username admin --password admin123 --serverurl http://localhost:8081/ --filename /tmp/workspace/test1-1.0-SNAPSHOT.jar --format maven2 -CgroupId=com.example -CartifactId=myapp -Cversion=1.0 -Aextension=jar --repository maven-releases"
+
     steps:
-    - run: echo "Archive command will start here"
+    - attach_workspace:
+        at: /tmp/workspace
+    - run: |
+        groovy/bin/groovy NexusPublisher.groovy << parameters.publisher-parameters >>
 
 jobs:
-  nexus-platform:
+  nexusjob:
     executor: default
     steps:
     - install
+    - archive
