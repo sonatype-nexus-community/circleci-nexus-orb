@@ -12,15 +12,16 @@ commands:
     description: "Installs the nexus-platform-api and CLI script"
     parameters:
       groovy-version:
+        description: "Version of Apache groovy to download and install"
         type: string
         default: "2.5.3"
     steps:
     # TODO: when NexusPublisher.groovy script has a released version update the curl command below accordingly
     - run: |
-        curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<<parameters.groovy-version>>.zip -o apache-groovy-binary.zip
+        curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
         curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/INT-1109_repository_groovy_wrapper/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
         unzip apache-groovy-binary.zip
-        mv groovy-<<parameters.groovy-version>> groovy
+        mv groovy-<< parameters.groovy-version >> groovy
 
   archive:
     description: "Archives artifacts to Nexus Repository Manager"
@@ -30,19 +31,25 @@ commands:
         type: string
         default: "${NEXUS_RM_USERNAME}"
       password:
+        description: "Password to access Nexus Repository Manager"
         type: string
         default: "${NEXUS_RM_PASSWORD}"
       serverurl:
+        description: "Nexus Repository Manager Server URL"
         type: string
         default: "${NEXUS_RM_SERVERURL}"
       filename:
+        description: "Path of file to publish"
         type: string
       format:
+        description: "Format of artifact to publish"
         type: string
         default: "maven2"
-      params:
+      attributes:
+        description: "Component coordinates and Asset attributes"
         type: string
       repository:
+        description: "Target repository name"
         type: string
         default: "maven-releases"
 
@@ -51,13 +58,13 @@ commands:
         at: /tmp/workspace
     - run: >
         groovy/bin/groovy NexusPublisher.groovy
-        --username <<parameters.username>>
-        --password <<parameters.password>>
-        --serverurl <<parameters.serverurl>>
-        --filename <<parameters.filename>>
-        --format <<parameters.format>>
-        --repository <<parameters.repository>>
-        <<parameters.params>>
+        --username << parameters.username >>
+        --password << parameters.password >>
+        --serverurl << parameters.serverurl >>
+        --filename << parameters.filename >>
+        --format << parameters.format >>
+        --repository << parameters.repository >>
+        << parameters.attributes >>
 
 jobs:
   nexusjob:
@@ -68,22 +75,29 @@ jobs:
         type: string
         default: "${NEXUS_RM_USERNAME}"
       password:
+        description: "Password to access Nexus Repository Manager"
         type: string
         default: "${NEXUS_RM_PASSWORD}"
       serverurl:
+        description: "Nexus Repository Manager Server URL"
         type: string
         default: "${NEXUS_RM_SERVERURL}"
       filename:
+        description: "Path of file to publish"
         type: string
       format:
+        description: "Format of artifact to publish"
         type: string
         default: "maven2"
-      params:
+      attributes:
+        description: "Component coordinates and Asset attributes"
         type: string
       repository:
+        description: "Target repository name"
         type: string
         default: "maven-releases"
       groovy-version:
+        description: "Version of Apache groovy to download and install"
         type: string
         default: "2.5.3"
     executor: default
@@ -96,5 +110,5 @@ jobs:
         serverurl: << parameters.serverurl >>
         filename:  << parameters.filename >>
         format: << parameters.format >>
-        params: << parameters.params >>
+        attributes: << parameters.attributes >>
         repository: << parameters.repository >>
