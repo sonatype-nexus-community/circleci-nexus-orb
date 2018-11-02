@@ -15,42 +15,32 @@ commands:
         type: string
         default: "2.5.3"
     steps:
+    # TODO: when NexusPublisher.groovy script has a released version update the curl command below accordingly
     - run: |
         curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<<parameters.groovy-version>>.zip -o apache-groovy-binary.zip
         curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/INT-1109_repository_groovy_wrapper/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
         unzip apache-groovy-binary.zip
-        mv groovy-<< parameters.groovy-version>> groovy
+        mv groovy-<<parameters.groovy-version>> groovy
 
   archive:
     description: "Archives artifacts to Nexus Repository Manager"
     parameters:
       username:
         type: string
-        default: "admin"
+        default: "${NEXUS_RM_USERNAME}"
       password:
         type: string
-        default: "admin123"
+        default: "${NEXUS_RM_PASSWORD}"
       serverurl:
         type: string
-        default: "http://localhost:8081/"
+        default: "${NEXUS_RM_SERVERURL}"
       filename:
         type: string
-        default: "/tmp/workspace/test1-1.0-SNAPSHOT.jar"
       format:
         type: string
         default: "maven2"
-      groupId:
+      params:
         type: string
-        default: "com.example"
-      artifactId:
-        type: string
-        default: "myapp"
-      version:
-        type: string
-        default: "1.0"
-      extension:
-        type: string
-        default: "jar"
       repository:
         type: string
         default: "maven-releases"
@@ -65,15 +55,5 @@ commands:
         --serverurl <<parameters.serverurl>>
         --filename <<parameters.filename>>
         --format <<parameters.format>>
-        -CgroupId=<<parameters.groupId>>
-        -CartifactId=<<parameters.artifactId>>
-        -Cversion=<<parameters.version>>
-        -Aextension=<<parameters.extension>>
         --repository <<parameters.repository>>
-
-jobs:
-  nexusjob:
-    executor: default
-    steps:
-    - install
-    - archive
+        <<parameters.params>>
