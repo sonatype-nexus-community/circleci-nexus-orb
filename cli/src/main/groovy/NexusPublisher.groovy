@@ -1,13 +1,5 @@
-import com.sonatype.nexus.api.common.Authentication
-import com.sonatype.nexus.api.common.ServerConfig
-import com.sonatype.nexus.api.repository.v3.DefaultAsset
-import com.sonatype.nexus.api.repository.v3.DefaultComponent
-import com.sonatype.nexus.api.repository.v3.RepositoryManagerV3ClientBuilder
-
-import groovy.cli.commons.CliBuilder
-
 /**
- * Copyright (c) 2016-present Sonatype, Inc. All rights reserved.
+ * Copyright (c) 2018-present Sonatype, Inc. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0,
  * and you may not use this file except in compliance with the Apache License Version 2.0.
@@ -19,6 +11,14 @@ import groovy.cli.commons.CliBuilder
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
+import com.sonatype.nexus.api.common.Authentication
+import com.sonatype.nexus.api.common.ServerConfig
+import com.sonatype.nexus.api.repository.v3.DefaultAsset
+import com.sonatype.nexus.api.repository.v3.DefaultComponent
+import com.sonatype.nexus.api.repository.v3.RepositoryManagerV3ClientBuilder
+
+import groovy.cli.commons.CliBuilder
+
 @Grab(group='org.slf4j', module='slf4j-simple', version='1.7.25')
 @Grab(group='com.sonatype.nexus', module='nexus-platform-api', version='3.3.20181025-095610.1ce86ad')
 
@@ -29,8 +29,10 @@ cli.u(type: String, longOpt: 'username', 'Username', required: true)
 cli.p(type: String, longOpt: 'password', 'Password', required: true)
 cli.f(type: String, longOpt: 'format', 'Artifact format. Examples: maven2', required: true)
 cli._(longOpt: 'filename', 'Filename to upload', convert: {new File(it)}, required: true)
-cli.C(args:2, valueSeparator:'=', argName:'key=value', 'Component coordinates, can be used multiple times. Example: -CgroupId=com.example -CartifactId=myapp -Cversion=1.0', required: true)
-cli.A(args:2, valueSeparator:'=', argName:'key=value', 'Asset attributes, can be used multiple times. Example: -Aextension=jar -Aclassifier=bin', required: true)
+cli.C(args:2, valueSeparator:'=', argName:'key=value', 'Component coordinates, can be used multiple times. Example: ' +
+    '-CgroupId=com.example -CartifactId=myapp -Cversion=1.0', required: true)
+cli.A(args:2, valueSeparator:'=', argName:'key=value', 'Asset attributes, can be used multiple times. Example: ' +
+    '-Aextension=jar -Aclassifier=bin', required: true)
 cli.r(type: String, longOpt: 'repository', 'Name of target repository on Nexus. Example: maven-releases', required: true)
 cli._(type: String, longOpt: 'tagname', 'The tag to apply (tag must already exist)')
 options = cli.parse(args)
