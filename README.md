@@ -3,7 +3,7 @@
 
 #### Development
 This Orb is not currently published to a production Orb repository. You can use the following
-development repository link instead: `orbtest/circleci-nexus-orb@dev:first`
+development repository link instead: `sonatype/nexus-platform-orb@dev:first`
 
 #### How to use the Nexus Orb in your config.yml
 This `.circleci/config.yml` is copied from CircleCI's examples here: https://circleci.com/docs/2.0/language-java/
@@ -47,7 +47,7 @@ your `.circleci/config.yml` and update the CircleCI `version` to at least `2.1`.
 
 ```
 orbs:
-  nexus-orb: orbtest/circleci-nexus-orb@dev:first
+  nexus-orb: sonatype/nexus-platform-orb@dev:first
 
 version: 2.1 # use CircleCI 2.1
 jobs: # a collection of steps
