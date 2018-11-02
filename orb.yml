@@ -57,3 +57,10 @@ commands:
         --format <<parameters.format>>
         --repository <<parameters.repository>>
         <<parameters.params>>
+
+jobs:
+  nexusjob:
+    executor: default
+    steps:
+    - install
+    - archive
