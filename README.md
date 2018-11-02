@@ -2,7 +2,6 @@
 ## CircleCI Nexus Orb
 
 #### Development
-
 This Orb is not currently published to a production Orb repository. You can use the following
 development repository link instead: `orbtest/circleci-nexus-orb@dev:first`
 
@@ -43,8 +42,8 @@ jobs: # a collection of steps
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples  
 ```
 
-To add the CircleCi Nexus Repository Manager Orb add the first 2 lines of the following example to the beginning of your `.circleci/config.yml`
-and update the CircleCI `version` to at least `2.1`.
+To add the CircleCi Nexus Repository Manager Orb add the first 2 lines of the following example to the beginning of 
+your `.circleci/config.yml` and update the CircleCI `version` to at least `2.1`.
 
 ```
 orbs:
@@ -90,13 +89,14 @@ this once per build even if you publish multiple artifacts.
 This will upload your artifacts to Nexus Repository Manager.
 * **filename**: path to the file to publish. This is typically the same value as the `path` used in
 the `store_artifacts` step in the code example above.
-* **attributes**: List of component and asset attributes. Component attributes are prefixed with `-C` and asset attributes with `-A`. This is passed directly to Nexus Repository Manger so
-many additional attributes to the ones used in the example above can be used as well.
+* **attributes**: List of component and asset attributes. Component attributes are prefixed with `-C` and asset attributes
+ with `-A`. This is passed directly to Nexus Repository Manger so many additional 
+ attributes to the ones used in the example above can be used as well.
 
 #### CircleCi Context support
 `username`, `password`, and possibly `serverurl` should not be hardcoded in your build files.
 If you create a CircleCi context with the environment variables below you can remove them from
-you `.circleci/config.yml` file.
+your `.circleci/config.yml` file.
 * **username:** `NEXUS_RM_USERNAME`
 * **password:** `NEXUS_RM_PASSWORD`
 * **serverurl:** `NEXUS_RM_SERVERURL`
