@@ -26,6 +26,7 @@ commands:
     description: "Archives artifacts to Nexus Repository Manager"
     parameters:
       username:
+        description: "Username to access Nexus Repository Manager"
         type: string
         default: "${NEXUS_RM_USERNAME}"
       password:
@@ -60,7 +61,40 @@ commands:
 
 jobs:
   nexusjob:
+    description: "Publish artifacts to Nexus Respository Manager"
+    parameters:
+      username:
+        description: "Username to access Nexus Repository Manager"
+        type: string
+        default: "${NEXUS_RM_USERNAME}"
+      password:
+        type: string
+        default: "${NEXUS_RM_PASSWORD}"
+      serverurl:
+        type: string
+        default: "${NEXUS_RM_SERVERURL}"
+      filename:
+        type: string
+      format:
+        type: string
+        default: "maven2"
+      params:
+        type: string
+      repository:
+        type: string
+        default: "maven-releases"
+      groovy-version:
+        type: string
+        default: "2.5.3"
     executor: default
     steps:
-    - install
-    - archive
+    - install:
+      groovy-version: << parameters.groovy-version >>
+    - archive:
+        username: << parameters.username >>
+        password: << parameters.password >>
+        serverurl: << parameters.serverurl >>
+        filename:  << parameters.filename >>
+        format: << parameters.format >>
+        params: << parameters.params >>
+        repository: << parameters.repository >>
