@@ -57,7 +57,7 @@ toMap(options.Cs).each { component.addAttribute(it.key, it.value) }
 
 // set asset attributes
 asset = new DefaultAsset(options.filename.name, options.filename.newInputStream())
-toMap(options.As).each { component.addAttribute(it.key, it.value) }
+toMap(options.As).each { asset.addAttribute(it.key, it.value) }
 component.addAsset(asset)
 
 // upload to nexus repository
