@@ -19,7 +19,7 @@ commands:
     # TODO: when NexusPublisher.groovy script has a released version update the curl command below accordingly
     - run: |
         curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
-        curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/INT-1109_repository_groovy_wrapper/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
+        curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/master/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
         unzip apache-groovy-binary.zip
         mv groovy-<< parameters.groovy-version >> groovy
 
