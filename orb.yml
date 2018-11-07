@@ -23,8 +23,8 @@ commands:
         unzip apache-groovy-binary.zip
         mv groovy-<< parameters.groovy-version >> groovy
 
-  archive:
-    description: "Archives artifacts to Nexus Repository Manager"
+  publish:
+    description: "Publishes artifacts to Nexus Repository Manager"
     parameters:
       username:
         description: "Username to access Nexus Repository Manager"
@@ -104,7 +104,7 @@ jobs:
     steps:
     - install:
       groovy-version: << parameters.groovy-version >>
-    - archive:
+    - publish:
         username: << parameters.username >>
         password: << parameters.password >>
         serverurl: << parameters.serverurl >>
