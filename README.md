@@ -73,7 +73,7 @@ following lines at the end of your `.circleci/config.yml`
       
       - nexus-orb/install
 
-      - nexus-orb/archive:
+      - nexus-orb/publish:
           filename: "target/demo-java-spring-0.0.1-SNAPSHOT.jar"
           attributes: "-CgroupId=com.example -CartifactId=myapp -Cversion=1.3 -Aextension=jar"
           username: "admin"
@@ -85,7 +85,7 @@ following lines at the end of your `.circleci/config.yml`
 This will install groovy and the Nexus client into your build system. You only need to run
 this once per build even if you publish multiple artifacts.
 
-##### nexus-orb/archive
+##### nexus-orb/publish
 This will upload your artifacts to Nexus Repository Manager.
 * **filename**: path to the file to publish. This is typically the same value as the `path` used in
 the `store_artifacts` step in the code example above.
