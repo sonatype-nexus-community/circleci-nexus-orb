@@ -2,7 +2,7 @@ version: 2.1
 description: >
   Sonatype Nexus Platform Integration
 
-  This Orb allows publishing of built artifacts to Nexus Repository Manager
+  This Orb allows publishing of build artifacts to Nexus Repository Manager
   instances. The source repo for this Orb can be found here:
   https://github.com/sonatype-nexus-community/circleci-nexus-orb
 
