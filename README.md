@@ -3,6 +3,8 @@
 #### Orb Information
 This Orb is published to `sonatype/nexus-platform-orb`. See the [orb page](https://circleci.com/orbs/registry/orb/sonatype/nexus-platform-orb) for the latest version.
 
+See the [demo](https://github.com/sonatype-nexus-community-circleci/circleci-nexus-demo) on the Sonatype Community site for a working example.
+
 #### How to use the Nexus Orb in your config.yml
 This `.circleci/config.yml` is copied from CircleCI's examples here: https://circleci.com/docs/2.0/language-java/
 
