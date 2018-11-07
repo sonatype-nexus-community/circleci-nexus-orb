@@ -1,21 +1,8 @@
 version: 2.1
 description: >
-  Sonatype Nexus Platform Integration
-
-  This Orb allows publishing of build artifacts to Nexus Repository Manager
-  instances. The source repo for this Orb can be found here:
-  https://github.com/sonatype-nexus-community/circleci-nexus-orb
-
-  Please refer to the link above for documentation on the required parameters
-  to publish artifacts. It is important to store the following configuration
-  items as CircleCI environment variables:
-    * NEXUS_RM_USERNAME - the username to access Repository Manager
-    * NEXUS_RM_PASSWORD - the password to access Repository Manager
-    * NEXUS_RM_SERVERURL - the fully qualified URL for Repository Manager
-
-  See CircleCI documentation for instructions on storing environment variables
-  in either your Project settings or in a Context
-    * https://circleci.com/docs/2.0/env-vars
+  Sonatype Nexus Platform Integration. This Orb allows publishing of build
+  artifacts to Nexus Repository Manager instances. The source for this Orb is
+  available at: https://github.com/sonatype-nexus-community/circleci-nexus-orb
 
 executors:
   default:

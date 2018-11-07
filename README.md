@@ -1,8 +1,7 @@
-
-## CircleCI Nexus Orb
+## CircleCI Org for the Nexus Platform
 
 #### Orb Information
-This Orb is published to `sonatype/nexus-platform-orb@1.0.1`
+This Orb is published to `sonatype/nexus-platform-orb`. See the [orb page](https://circleci.com/orbs/registry/orb/sonatype/nexus-platform-orb) for the latest version.
 
 #### How to use the Nexus Orb in your config.yml
 This `.circleci/config.yml` is copied from CircleCI's examples here: https://circleci.com/docs/2.0/language-java/
