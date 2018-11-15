@@ -19,7 +19,6 @@ commands:
         type: string
         default: "2.5.3"
     steps:
-    # TODO: when NexusPublisher.groovy script has a released version update the curl command below accordingly
     - run: |
         curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
         curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/master/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
@@ -55,10 +54,17 @@ commands:
         description: "Target repository name"
         type: string
         default: "maven-releases"
+      attach-workspace-at:
+        description: "Path to workspace attachment point"
+        type: string
+        default: ""
 
     steps:
-    - attach_workspace:
-        at: /tmp/workspace
+    - when:
+        condition: << parameters.attach-workspace-at >>
+        steps:
+          - attach_workspace:
+              at: << parameters.attach-workspace-at >>
     - run: >
         groovy/bin/groovy NexusPublisher.groovy
         --username << parameters.username >>
@@ -115,3 +121,45 @@ jobs:
         format: << parameters.format >>
         attributes: << parameters.attributes >>
         repository: << parameters.repository >>
+
+examples:
+  publish_java:
+    description: "Example builds and publishes java artifact"
+    usage:
+      version: 2.1
+      jobs: # a collection of steps
+        build: # runs not using Workflows must have a `build` job as entry point
+
+          docker: # run the steps with Docker
+          - image: circleci/openjdk:8-jdk-browsers # ...with this image as the primary container; this is where all `steps` will run
+
+          steps: # a collection of executable commands
+
+          - checkout # check out source code to working directory
+
+          - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
+              key: publish-demo-{{ checksum "pom.xml" }}
+
+          - run: mvn dependency:go-offline # gets the project dependencies
+
+          - save_cache: # saves the project dependencies
+              paths:
+              - ~/.m2
+              key: publish-demo-{{ checksum "pom.xml" }}
+
+          - run: mvn package # run the actual tests
+
+          - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard.
+              path: target/surefire-reports
+
+          - store_artifacts: # store the uberjar as an artifact
+              path: target/test1-1.0-SNAPSHOT.jar
+
+          - nexus-orb/install # install Sonatype Nexus Repository Manager client
+
+          - nexus-orb/publish: # publish artifact
+              filename: "target/test1-1.0-SNAPSHOT.jar" # same filename as in step store_artifacts above
+              attributes: "-CgroupId=com.example -CartifactId=myapp -Cversion=1.0 -Aextension=jar"
+              username: "admin"     # in production use environment variable $NEXUS_RM_USERNAME
+              password: "admin123"  # in production use environment variable $NEXUS_RM_PASSWORD
+              serverurl: "http://example.com:8081/" # or environment variable $NEXUS_RM_USERNAME

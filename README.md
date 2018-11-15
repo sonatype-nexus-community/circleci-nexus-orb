@@ -92,6 +92,7 @@ the `store_artifacts` step in the code example above.
 * **attributes**: List of component and asset attributes. Component attributes are prefixed with `-C` and asset attributes
  with `-A`. This is passed directly to Nexus Repository Manger so many additional 
  attributes to the ones used in the example above can be used as well.
+* **attach-workspace-at**: Path to attach CircleCi workspace. Enables access to files from a preceding job
 
 #### CircleCi Context support
 `username`, `password`, and possibly `serverurl` should not be hardcoded in your build files.
