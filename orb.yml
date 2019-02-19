@@ -9,6 +9,10 @@ executors:
     description: "CircleCI image for OpenJDK"
     docker:
     - image: circleci/openjdk
+  sonatype:
+    description: "Sonatype image with Nexus Platform CLI"
+    docker:
+    - image: fernau/publishtest:0.0.2
 
 commands:
   install:
