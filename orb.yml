@@ -5,14 +5,10 @@ description: >
   available at: https://github.com/sonatype-nexus-community/circleci-nexus-orb
 
 executors:
-  default:
-    description: "CircleCI image for OpenJDK"
-    docker:
-    - image: circleci/openjdk
-  sonatype:
+  nexus-platform-cli:
     description: "Sonatype image with Nexus Platform CLI"
     docker:
-    - image: fernau/publishtest:0.0.2
+    - image: sonatype/nexus-platform-cli:0.0.20190221-200155.19a5dd0
 
 commands:
   install:
@@ -22,13 +18,22 @@ commands:
         description: "Version of Apache groovy to download and install"
         type: string
         default: "2.5.3"
+      script-version:
+        description: "Version of NexusPublisher groovy script to download and install."
+        type: string
+        default: "master"
+      sonatypedir:
+        description: "Location of Sonatype scripts"
+        type: string
+        default: "${CIRCLE_WORKING_DIRECTORY}/sonatype"
     steps:
-    # TODO: when NexusPublisher.groovy script has a released version update the curl command below accordingly
     - run: |
         curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
-        curl -L https://raw.githubusercontent.com/sonatype-nexus-community/circleci-nexus-orb/master/cli/src/main/groovy/NexusPublisher.groovy -o NexusPublisher.groovy
+        mkdir -p << parameters.sonatypedir >>/bin || true
+        curl -L https://raw.githubusercontent.com/sonatype-nexus-community/docker-nexus-platform-cli/<< parameters.script-version >>/src/main/groovy/NexusPublisher.groovy -o << parameters.sonatypedir >>/bin/NexusPublisher.groovy
         unzip apache-groovy-binary.zip
         mv groovy-<< parameters.groovy-version >> groovy
+        echo PATH=${PATH}:${CIRCLE_WORKING_DIRECTORY}/groovy/bin/ > setup.sh
 
   publish:
     description: "Publishes artifacts to Nexus Repository Manager"
@@ -59,16 +64,27 @@ commands:
         description: "Target repository name"
         type: string
         default: "maven-releases"
-
+      workspace:
+        description: "CircleCI workspace attachment point"
+        type: string
+        default: ""
+      sonatypedir:
+        description: "Location of Sonatype scripts"
+        type: string
+        default: "${CIRCLE_WORKING_DIRECTORY}/sonatype"
     steps:
-    - attach_workspace:
-        at: /tmp/workspace
+    - when:
+        condition: << parameters.workspace >>
+        steps:
+          - attach_workspace:
+              at: << parameters.workspace >>
     - run: >
-        groovy/bin/groovy NexusPublisher.groovy
+        [[ -r setup.sh ]] && . setup.sh &&
+        groovy << parameters.sonatypedir >>/bin/NexusPublisher.groovy
         --username << parameters.username >>
         --password << parameters.password >>
         --serverurl << parameters.serverurl >>
-        --filename << parameters.filename >>
+        --filename << parameters.workspace >>/<< parameters.filename >>
         --format << parameters.format >>
         --repository << parameters.repository >>
         << parameters.attributes >>
@@ -92,6 +108,7 @@ jobs:
       filename:
         description: "Path of file to publish"
         type: string
+        default: "${NEXUS_RM_FILENAME}"
       format:
         description: "Format of artifact to publish"
         type: string
@@ -99,18 +116,21 @@ jobs:
       attributes:
         description: "Component coordinates and Asset attributes"
         type: string
+        default: "${NEXUS_RM_ATTRIBUTES}"
       repository:
         description: "Target repository name"
         type: string
         default: "maven-releases"
-      groovy-version:
-        description: "Version of Apache groovy to download and install"
+      workspace:
+        description: "CircleCI workspace attachment point"
         type: string
-        default: "2.5.3"
-    executor: default
+        default: "/tmp/workspace"
+      sonatypedir:
+        description: "Location of Sonatype scripts"
+        type: string
+        default: "/opt/sonatype"
+    executor: nexus-platform-cli
     steps:
-    - install:
-      groovy-version: << parameters.groovy-version >>
     - publish:
         username: << parameters.username >>
         password: << parameters.password >>
@@ -119,3 +139,5 @@ jobs:
         format: << parameters.format >>
         attributes: << parameters.attributes >>
         repository: << parameters.repository >>
+        workspace: << parameters.workspace >>
+        sonatypedir: << parameters.sonatypedir >>
