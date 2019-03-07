@@ -61,6 +61,25 @@ jobs: # a collection of steps
    ...
 ```
 
+### Option A: Using CircleCI workflows
+
+After we have imported the Orb into our build we can now call Nexus RM. To do this add the
+following lines at the end of your `.circleci/config.yml`
+
+```
+   ...
+   ...
+   workflows:
+     main:
+       jobs:
+         - build
+         - nexus-orb/nexusjob:
+             requires:
+               - build
+```
+
+### Option B: Using CircleCI jobs
+
 After we have imported the Orb into our build we can now call Nexus RM. To do this add the
 following lines at the end of your `.circleci/config.yml`
 
@@ -74,11 +93,12 @@ following lines at the end of your `.circleci/config.yml`
       - nexus-orb/install
 
       - nexus-orb/publish:
-          filename: "target/demo-java-spring-0.0.1-SNAPSHOT.jar"
-          attributes: "-CgroupId=com.example -CartifactId=myapp -Cversion=1.3 -Aextension=jar"
-          username: "admin"
-          password: "admin123"
-          serverurl: "http://nexus.example.com/"
+          # add the following required variables to your CircleCI environment:
+          #   NEXUS_RM_USER
+          #   NEXUS_RM_PASSWORD
+          filename: "target/demo-java-spring-0.0.1-SNAPSHOT.jar" # or environment NEXUS_RM_FILENAME
+          attributes: "-CgroupId=com.example -CartifactId=myapp -Cversion=1.3 -Aextension=jar" # or NEXUS_RM_ATTRIBUTES
+          serverurl: "http://nexus.example.com/" # or environment NEXUS_RM_SERVERURL
 ```
 
 ##### nexus-orb/install
