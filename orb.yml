@@ -8,7 +8,7 @@ executors:
   nexus-platform-cli:
     description: "Sonatype image with Nexus Platform CLI"
     docker:
-    - image: sonatype/nexus-platform-cli:0.0.20190221-200155.19a5dd0
+    - image: sonatype/nexus-platform-cli:0.0.20191018-130334.c9f67e0
 
 commands:
   install:
