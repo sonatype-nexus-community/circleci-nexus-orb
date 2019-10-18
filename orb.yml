@@ -79,12 +79,12 @@ commands:
           - attach_workspace:
               at: << parameters.workspace >>
     - run: >
-        [[ -r setup.sh ]] && . setup.sh &&
+        [[ -r setup.sh ]] && . setup.sh ;
         groovy << parameters.sonatypedir >>/bin/NexusPublisher.groovy
         --username << parameters.username >>
         --password << parameters.password >>
         --serverurl << parameters.serverurl >>
-        --filename << parameters.workspace >>/<< parameters.filename >>
+        --filename $(if [ ! -z "<< parameters.workspace >>" ] ; then echo << parameters.workspace >>/ ; fi)<< parameters.filename >>
         --format << parameters.format >>
         --repository << parameters.repository >>
         << parameters.attributes >>
