@@ -30,7 +30,7 @@ commands:
         default: "${CIRCLE_WORKING_DIRECTORY}/sonatype"
     steps:
     - run: |
-        curl -L https://dl.bintray.com/groovy/maven/apache-groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
+        curl -L https://groovy.jfrog.io/artifactory/libs-release-local/org/codehaus/groovy/groovy-binary/<< parameters.groovy-version >>/groovy-binary-<< parameters.groovy-version >>.zip -o apache-groovy-binary.zip
         mkdir -p << parameters.sonatypedir >>/bin || true
         curl -L https://raw.githubusercontent.com/sonatype-nexus-community/docker-nexus-platform-cli/<< parameters.script-version >>/src/main/groovy/NexusPublisher.groovy -o << parameters.sonatypedir >>/bin/NexusPublisher.groovy
         unzip apache-groovy-binary.zip
