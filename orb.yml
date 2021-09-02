@@ -23,7 +23,7 @@ commands:
       script-version:
         description: "Version of NexusPublisher groovy script to download and install."
         type: string
-        default: "main"
+        default: "master"
       sonatypedir:
         description: "Location of Sonatype scripts"
         type: string
